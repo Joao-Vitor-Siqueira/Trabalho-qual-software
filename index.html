@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramenta auditoria</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="forms" id="forms">
+        <div class="formContainer" id="formRequisitos">
+            <h1>Engenharia de requisitos</h1>
+        </div> 
+        <div class="formContainer" id="formPcp" style="background-color: #444444;">
+            <h1>Projeto e contrução de produto</h1>
+        </div>
+    </div>   
+    <div class="finishBtn" id="finish" name="finish">
+        <button >Finalizar</button>
+    </div> 
+    
+    <div class="log hidden" id="log">
+        <div class="pendencies">
+            <h1>Não Conformidades</h1>
+            <div class="logTable">
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Processo</th>
+                            <th>Prioridade</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="results" id="resultEr">
+            <h1>Engenharia de requisitos</h1>
+            <div>Número de itens:</div>
+            <div>Não Conformidades registradas:</div>
+            <div>Aderência:</div>
+        </div>
+        <div class="results" id="resultPcp">
+            <h1>Projeto e Construção do Produto</h1>
+            <div>Número de itens:</div>
+            <div>Não Conformidades registradas:</div>
+            <div>Aderência:</div>
+        </div>
+    </div>
+</body>
+</html>
