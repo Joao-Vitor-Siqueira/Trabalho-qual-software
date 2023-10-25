@@ -11,6 +11,20 @@ body{
     background-color: #888888;
 }
 
+img:hover{
+    cursor: pointer;
+    opacity: .75;
+    scale: 1.1;
+    transition: .1s ease-in-out;
+}
+
+#helpModal{
+    width: 300px;
+    border-radius: 1vmin;
+    outline: none;
+    box-shadow: 4px 4px 10px 0px #555555;
+}
+
 .forms{
     overflow-y: scroll;
     height: 100vh;
@@ -20,12 +34,17 @@ body{
 .formContainer{
     background-color: #333333;
     color: white;
-    width: 60vw;
+    width: 80vw;
     padding: 2rem;
     gap: 1rem;
     padding-top: 0;
     display: flex;
     flex-direction: column;
+}
+
+.formContainer > div:first-child{
+    display: flex;
+    justify-content: space-between;
 }
 
 .formItem{
@@ -35,10 +54,8 @@ body{
     padding-bottom: 1rem;
 }
 
-.formContainer h1{
-    font-size: 2.5rem;
-    border-bottom: 1px solid white;
-    padding: .2rem;
+.formItem > div > label:first-child{
+    margin-right: 1rem;
 }
 
 input[type = "checkbox"]{

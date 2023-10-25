@@ -1,12 +1,19 @@
+const helpBtn = document.getElementById("helpBtn")
+const modal = document.getElementById("helpModal")
+
+//form
 const formsDiv = document.getElementById("forms")
 const formRequisitos = document.getElementById("formRequisitos")
-const formPcp = document.getElementById("formPcp")
+const formItg = document.getElementById("formItg")
 const finishBtn = document.getElementById("finish")
+
+//relatório
 const log = document.getElementById("log")
 const resultsTable = document.getElementById("resultsTable")
 const resultsRequisitos = document.getElementById("resultEr").children
-const resultsPcp = document.getElementById("resultPcp").children
+const resultsItg = document.getElementById("resultItg").children
 
+//form items
 const itensRequisitos = [
     "Foi gerado um artefato contendo os requisitos coletados?",
     "O artefato com os requisitos coletados é mantido atualizado?",
@@ -29,64 +36,105 @@ const itensIntegracao = [
     "Foi feita a revisão do produto após a integração?"
 ]
 
-function loadForm(form,arr){
+const cargos = ["Gerente","Analista de qualidade","Analista financeiro","Desenvolvedor"]
+const prioridades = ['Baixa', 'Média', 'Alta', 'Urgente']
+
+function loadForm(form,questions){
+    
     let idTemplate;
-    form.id == "formRequisitos"?idTemplate = "er": idTemplate = "pcp"
-  
-    for (let i = 0; i < arr.length; i++) {
-        let newDiv = document.createElement('div')
-        newDiv.classList.add("formItem")
-        let label = document.createElement('label')
-        label.setAttribute('for', `${idTemplate + i}`)
-        label.innerHTML = `<input type="checkbox" id=${idTemplate + i} name=${idTemplate + i}><span>${arr[i]}</span>`
+    form.id == "formRequisitos"?idTemplate = "er": idTemplate = "itg" 
+    
+    for (let i = 0; i < questions.length; i++) {
         
-        newDiv.appendChild(label)
- 
-        let priorityDiv = document.createElement('div')
+        //containers
+        let itemDiv = document.createElement("div")
+        let selectDiv = document.createElement("div")
+        itemDiv.classList.add("formItem")  
+        selectDiv.classList.add("selectContainer")
         
-        let labelPriority = document.createElement('label')
-        labelPriority.textContent = 'Prioridade: '
-        priorityDiv.appendChild(labelPriority)
+        //descrição    
+        let descLabel = document.createElement('label')
+        descLabel.setAttribute("for",`${idTemplate}Desc${i}`)  
         
-        let select = document.createElement('select')
-        select.setAttribute('id', `${idTemplate + i}Select`)
-        select.setAttribute('name', `${idTemplate + i}Select`)
+        let checkBox = document.createElement("input") 
+        checkBox.setAttribute("type","checkbox")
+        checkBox.setAttribute("id",`${idTemplate}Desc${i}`)
         
-        let options = ['Baixa', 'Média', 'Alta', 'Urgente']
-        for (let j = 0; j < options.length; j++) {
-            let option = document.createElement('option')
-            option.setAttribute('value', options[j])
-            option.textContent = options[j]
-            select.appendChild(option)
-        }
+        let desc = document.createElement("span")
+        desc.innerHTML = questions[i]
+            
+        //cargo    
+        let roleLabel = document.createElement("label")
+        roleLabel.setAttribute("for",`${idTemplate}Cargo${i}`)
+        let roleSelect = document.createElement("select")
+        roleSelect.setAttribute("id",`${idTemplate}Cargo${i}`)
+        roleSelect.setAttribute("name",`${idTemplate}Cargo${i}`)
         
-        priorityDiv.appendChild(select)
-        newDiv.appendChild(priorityDiv)
-        form.appendChild(newDiv) 
-        }
+        //prioridade        
+        let priorityLabel = document.createElement("label")
+        priorityLabel.setAttribute("for",`${idTemplate}Priority${i}`)
+        let prioritySelect = document.createElement("select")
+        prioritySelect.setAttribute("id",`${idTemplate}Priority${i}`)
+        prioritySelect.setAttribute("name",`${idTemplate}Priority${i}`)
+
+        //select options
+        for (let j = 0; j < 4; j++) {
+            let role = document.createElement('option');
+            role.setAttribute('value', cargos[j]);
+            role.textContent = cargos[j];
+
+            let priority = document.createElement('option')
+            priority.setAttribute('value', prioridades[j]);
+            priority.textContent = prioridades[j];
+            
+            roleSelect.appendChild(role)
+            prioritySelect.appendChild(priority)
+        }               
+        
+        descLabel.appendChild(checkBox)
+        descLabel.appendChild(desc)
+        roleLabel.appendChild(roleSelect)
+        priorityLabel.appendChild(prioritySelect)
+        itemDiv.appendChild(descLabel)
+        selectDiv.appendChild(roleLabel)
+        selectDiv.appendChild(priorityLabel)
+        itemDiv.appendChild(selectDiv)
+        form.appendChild(itemDiv)
+    } 
 }
 
-function generateLog(idTemplate,itens,resultDiv,processo){
+function generateTable(itens,resultDiv,idTemplate){
+    let processo;
+    idTemplate == "er"? processo = "Engenharia de requisitos": processo = "Integração de produto"
     let nConformidades = 0; 
+    
     for (let i = 0; i < itens.length; i++) {
-        let newRow = document.createElement('tr');
-        let select = document.getElementById(`${idTemplate + i}Select`)
-        let checkbox = document.getElementById(`${idTemplate + i}`); 
-        if(!checkbox.checked){
-           continue
-        } 
-        nConformidades ++; 
-        let desc = document.createElement("td")
-        desc.textContent = itens[i]
-        let processoCol = document.createElement("td")
+        let checkbox = document.getElementById(`${idTemplate}Desc${i}`);
+        if(checkbox.checked){
+            continue
+         } 
+        
+        let newRow = document.createElement('tr');    
+        let cargoSelect = document.getElementById(`${idTemplate}Cargo${i}`)
+        let prioritySelect = document.getElementById(`${idTemplate}Priority${i}`)
+                
+        let descCol = document.createElement("td")    
+        let processoCol = document.createElement("td")   
+        let cargoCol = document.createElement("td")
+        let priorityCol = document.createElement("td")
+        
+        descCol.textContent = itens[i]
         processoCol.textContent = processo
-        let prioridade = document.createElement("td")
-        prioridade.textContent = select.options[select.selectedIndex].value
+        cargoCol.textContent = cargoSelect.options[cargoSelect.selectedIndex].value
+        priorityCol.textContent = prioritySelect.options[prioritySelect.selectedIndex].value
 
-        newRow.appendChild(desc)
+        newRow.appendChild(descCol)
         newRow.appendChild(processoCol)
-        newRow.appendChild(prioridade)
-        resultsTable.appendChild(newRow);      
+        newRow.appendChild(cargoCol)
+        newRow.appendChild(priorityCol)
+        resultsTable.appendChild(newRow);  
+        
+        nConformidades ++;
     }
 
     resultDiv[1].innerHTML += itens.length;
@@ -95,17 +143,31 @@ function generateLog(idTemplate,itens,resultDiv,processo){
 }
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
     loadForm(formRequisitos,itensRequisitos)
-    loadForm(formPcp,itensIntegracao)
+    loadForm(formItg,itensIntegracao)
   });
 
-finishBtn.addEventListener("click",(e) =>{
+finishBtn.addEventListener("click",() =>{
     formsDiv.classList.add("hidden")
     finishBtn.classList.add("hidden")
     log.classList.remove("hidden")
-    generateLog("er",itensRequisitos,resultsRequisitos,"Engenharia de requisitos")
-    generateLog("pcp",itensIntegracao,resultsPcp,"Intregação do produto")
+    generateTable(itensRequisitos,resultsRequisitos,"er")
+    generateTable(itensIntegracao,resultsItg,"itg")
 })
 
+helpBtn.addEventListener("click", () => {
+    modal.showModal()
+})
+
+modal.addEventListener("click", e => {
+    const modalDimensions = modal.getBoundingClientRect()
+    if (
+      e.clientX < modalDimensions.left ||
+      e.clientX > modalDimensions.right ||
+      e.clientY < modalDimensions.top ||
+      e.clientY > modalDimensions.bottom
+    ) {
+      modal.close()
+    }
+  })

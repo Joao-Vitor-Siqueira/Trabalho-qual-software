@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
 </head>
-<body>
+<body> 
     <div class="forms" id="forms">
         <div class="formContainer" id="formRequisitos">
-            <h1>Engenharia de requisitos</h1>
-            <div><h2>- Clique em um item para marcá-lo como uma não conformidade</h2></div>
+            <div>
+                <h1>Engenharia de requisitos</h1>
+                <img id="helpBtn" src="help.svg" alt="ajuda">
+            </div>            
         </div> 
-        <div class="formContainer" id="formPcp" style="background-color: #444444;">
+        
+        <div class="formContainer" id="formItg" style="background-color: #444444;">
             <h1>Integração do produto</h1>
         </div>
+        
         <div class="finishBtn" id="finish" name="finish">
             <button >Finalizar</button>
         </div> 
@@ -30,6 +34,7 @@
                         <tr>
                             <th>Descrição</th>
                             <th>Processo</th>
+                            <th>Responsável</th>
                             <th>Prioridade</th>
                         </tr>
                     </thead>
@@ -42,12 +47,20 @@
             <div>Não Conformidades registradas: </div>
             <div>Aderência: </div>
         </div>
-        <div class="results" id="resultPcp">
+        <div class="results" id="resultItg">
             <h1>Projeto e Construção do Produto</h1>
             <div>Número de itens: </div>
             <div>Não Conformidades registradas: </div>
             <div>Aderência: </div>
         </div>
     </div>
+
+    <dialog id="helpModal">
+        <h2>Prioridades</h2>
+        <p>Baixa: A resolver em até 7 dias</p>
+        <p>Média: A resolver em até 5 dias</p>
+        <p>Alta: A resolver em até 2 dias</p>
+        <p>Urgente: A resolver em até 1 dia</p>
+    </dialog>
 </body>
 </html>
